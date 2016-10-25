@@ -46,13 +46,15 @@ def load_movies():
 
     with open("seed_data/u.item") as movie_file:
         for row in movie_file:
-            row = row.rstrip()
-            data = row.split("|")
+
+            data = row.rstrip().split("|")
+
             movie_id = data[0]
-            title = data[1][:-7]
-            # 01-Jan-1995
+            # Slice removes date at end of movie title
+            title = data[1][:-7].decode("latin-1")
+
             if data[2]:
-                released_at = datetime.strptime(str(data[2]), '%d-%b-%Y')
+                released_at = datetime.strptime(data[2], '%d-%b-%Y')
             else:
                 released_at = None
 
@@ -77,8 +79,9 @@ def load_ratings():
 
     with open("seed_data/u.data") as rating_file:
         for row in rating_file:
-            row = row.rstrip()
-            data = row.split('\t')
+
+            data = row.rstrip().split('\t')
+
             user_id = data[0]
             movie_id = data[1]
             score = data[2]
