@@ -1,29 +1,25 @@
 <!doctype html>
 <html>
 <head>
-  <title>Ratings</title>
+  <title>{% block title %} Ratings DEFAULT {% endblock %}</title>
 
 </head>
 
 <body>
-  Ratings
-  <hr>
-  {# Show flashed messages, if any #}
-{% with messages=get_flashed_messages() %}
-  {% if messages %}
-    <fieldset>
-      <label>Flash Messages:</label>
-      <ul>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-      </ul>
-    </fieldset>
-  {% endif %}
-{% endwith %}
+  <!-- Show flashed messages, if any-->
+  {% with messages=get_flashed_messages() %}
+    {% if messages %}
+      <fieldset>
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      </fieldset>
+    {% endif %}
+  {% endwith %}
 
-  {% block content %} put your content here {% endblock %}
-
-
+  {% block content %} <!-- Block content --> {% endblock %}
 </body>
+
 </html>
