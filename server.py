@@ -35,15 +35,20 @@ def user_list():
     """Show list of users."""
 
     users = User.query.all()
-    movie_ratings = db.session.query(Movie.title, Rating.score).join(Rating).filter(Rating.user_id == 123).all()
     return render_template("user_list.html", users=users)
 
-# @app.route("/users/<user_id>")
-#     """dfgdfg"""
-#     user = User.query.get(user_id)
-#     movies = user.movies
+@app.route("/users/<user_id>")
+    # Get user OBJECT
+def user_details(user_id):
+    """User details pages"""
+    user = User.query.get(user_id)
 
-#     return render_template("user_details.html", user=user)
+    movie_ratings = db.session.query(Movie, Rating).join(Rating).filter(Rating.user_id == user_id).all()
+
+    # movies = user.movies
+
+    return render_template("user_details.html", user=user, movie_ratings=movie_ratings)
+
 
 
 @app.route("/movies")
