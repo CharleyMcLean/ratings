@@ -74,17 +74,14 @@ def login_form():
 
 @app.route("/login", methods=["POST"])
 def login_process():
+    
 
     email = request.form.get('email')
     password = request.form.get('password')
 
     if User.query.filter(User.email == email).first():
         user = User.query.filter(User.email==email).first()
-        print '\n\n'
-        print '*'*80
-        print user
-        print '\n\n'
-        print '*'*80
+
         db_password = user.password
 
         if password == db_password:
