@@ -35,7 +35,16 @@ def user_list():
     """Show list of users."""
 
     users = User.query.all()
+    movie_ratings = db.session.query(Movie.title, Rating.score).join(Rating).filter(Rating.user_id == 123).all()
     return render_template("user_list.html", users=users)
+
+# @app.route("/users/<user_id>")
+#     """dfgdfg"""
+#     user = User.query.get(user_id)
+#     movies = user.movies
+
+#     return render_template("user_details.html", user=user)
+
 
 @app.route("/movies")
 def movie_list():
