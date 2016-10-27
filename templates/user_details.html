@@ -4,6 +4,14 @@
 
 {% block content %}
 
+  {% if session %}
+      <div>
+        Logged in as: User {{session['current_user']}}
+      </div>
+
+  {% endif %}
+
+
   <div>
     Age: {{ user.age }}
   </div>  
@@ -25,5 +33,7 @@
 
       {% endfor %}
     </ul>
+
+    <a href="/">HomePage</a>
 
 {% endblock %}

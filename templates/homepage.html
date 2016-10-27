@@ -16,14 +16,24 @@
 <p><a href="/register">Register</a></p>
 
 {% if session %}
-    <h2>Logout</h2>
-    <p><a href="/logout">Logout</a></p>
+    <form action="/logout" method="POST">
+        <h2>Logout</h2>
+    <input type="submit" value="Logout">
+
+    </form>
 {% else %}
     <h2>Login</h2>
     <p><a href="/login">Login</a></p>
 {% endif %}
 
 {% endblock %}
+
+
+
+
+    
+    
+
 
 
 <!-- Logging out details --- if there is as session display logout.... -->

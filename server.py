@@ -52,7 +52,8 @@ def user_details(user_id):
     # movies = user.movies
 
     return render_template("user_details.html", user=user
-                                              , movie_ratings=movie_ratings)
+                                              , movie_ratings=movie_ratings
+                                              , session=session)
 
 
 @app.route("/movies")
@@ -71,7 +72,18 @@ def movie_details(movie_id):
 
     ratings = movie.ratings
 
-    return render_template("movie_details.html", movie=movie, ratings=ratings)
+    if session['current_user']:
+        user_rating = (db.session.query(Rating.score)
+                     .filter(Rating.user_id == session['current_user']).first())
+    else:
+        user_rating = None
+
+    return render_template("movie_details.html", movie=movie
+                                               , ratings=ratings
+                                               , session=session
+                                               , user_rating=user_rating)
+@app.route("/rate_movie", methods=[POST])
+def rate_movie():
 
 
 
@@ -150,7 +162,8 @@ def login_process():
         return redirect("/login")
 
 
-@app.route("/logout", methods=["GET"])
+
+@app.route("/logout", methods=["POST"])
 def logout():
     """"Logout User"""
 

@@ -13,9 +13,33 @@
   </div>  
 
   <div>
-    IMDB: {{ movie.imdb_url }}
+    <a href={{ movie.imdb_url }}>IMDB</a> 
   </div>  
 
+  {% if session %}
+      <div>Logged in as: User {{session['current_user']}}</div>
+      <form action="/?????" method="POST">
+        {% if user_rating %}
+          <div>Current rating:  {{user_rating}}</div>
+          <div>Rerate movie?</div>
+        {% else %}
+          <div>Movie not yet rated by you.</div>
+          <div>Rate movie?</div>
+        {% endif %}
+
+        <select>
+          <option name="rating" value="1">1</option>
+          <option name="rating" value="2">2</option>
+          <option name="rating" value="3">3</option>
+          <option name="rating" value="4">4</option>
+          <option name="rating" value="5">5</option>
+        </select>
+
+        <input type="submit" value="Rate">
+
+    </form>
+      
+  {% endif %}
 
     <h2>Ratings</h2>
     <ul>
