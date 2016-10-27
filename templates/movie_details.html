@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %} Movie details {% endblock %}
+
+{% block content %}
+
+  <div>
+    Title: {{ movie.title }}
+  </div>  
+
+  <div>
+    Release date: {{ movie.released_at }}
+  </div>  
+
+  <div>
+    IMDB: {{ movie.imdb_url }}
+  </div>  
+
+
+    <h2>Ratings</h2>
+    <ul>
+      {% for rating in ratings %}
+          <li> 
+              <a href="/users/{{ rating.user_id }}">
+                User id ({{ rating.user_id }})
+              </a>
+              Score: {{ rating.score }}
+          </li>
+
+      {% endfor %}
+    </ul>
+
+{% endblock %}

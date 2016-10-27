@@ -15,12 +15,12 @@
 
     <h2>Movies</h2>
     <ul>
-      {% for item in movie_ratings %}
+      {% for movie, rating in movie_ratings %}
           <li> 
-              <a href="/movies/{{ item[1].movie_id }}">
-                {{ item[0].title }}
+              <a href="/movies/{{ movie.movie_id }}">
+                {{ movie.title }}
               </a>
-              {{ item[1].score }}
+              User Rating: {{ rating.score }}
           </li>
 
       {% endfor %}

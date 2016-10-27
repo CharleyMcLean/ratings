@@ -37,26 +37,41 @@ def user_list():
     users = User.query.all()
     return render_template("user_list.html", users=users)
 
+
+
 @app.route("/users/<user_id>")
     # Get user OBJECT
 def user_details(user_id):
     """User details pages"""
     user = User.query.get(user_id)
 
-    movie_ratings = db.session.query(Movie, Rating).join(Rating).filter(Rating.user_id == user_id).all()
+    movie_ratings = (db.session.query(Movie, Rating)
+                               .join(Rating).filter(Rating.user_id == user_id)
+                               .order_by(Movie.title).all())
 
     # movies = user.movies
 
-    return render_template("user_details.html", user=user, movie_ratings=movie_ratings)
-
+    return render_template("user_details.html", user=user
+                                              , movie_ratings=movie_ratings)
 
 
 @app.route("/movies")
 def movie_list():
     """Show list of movies."""
 
-    movies = Movie.query.all()
+    movies = Movie.query.order_by(Movie.title).all()
     return render_template("movie_list.html", movies=movies)
+
+
+@app.route("/movies/<int:movie_id>")
+def movie_details(movie_id):
+    """Show movie detail page."""
+
+    movie = Movie.query.get(movie_id)
+
+    ratings = movie.ratings
+
+    return render_template("movie_details.html", movie=movie, ratings=ratings)
 
 
 
@@ -119,7 +134,10 @@ def login_process():
             # Set session cookie to user_id from user OBJECT
             session['current_user'] = user.user_id 
             flash("Logged in as %s" % user.email)
-            return redirect("/")
+
+            # Tried to put path as argument, but had to make variable first
+            redirect_path = '/users/%s' % str(user.user_id)
+            return redirect(redirect_path) 
 
         # If wrong password, flash message, redirect to login
         else:
@@ -132,7 +150,7 @@ def login_process():
         return redirect("/login")
 
 
-@app.route("/logout")
+@app.route("/logout", methods=["GET"])
 def logout():
     """"Logout User"""
 
