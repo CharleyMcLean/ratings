@@ -1,0 +1,35 @@
+{
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.animate-me {
+    border-radius: 50%;
+    animation: color-pulse 3s ease-in infinite alternate;
+}
+
+
+@keyframes color-pulse {
+    0% {
+        background-color: #f06292;
+        height: 100px;
+        width: 100px;
+    }
+
+    50% {
+        background-color: #fff176;
+    }
+
+    100% {
+        background-color: #4fc3f7;
+        height: 300px;
+        width: 300px;
+    }
+}

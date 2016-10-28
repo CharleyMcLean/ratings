@@ -1,11 +1,13 @@
 <!doctype html>
 <html>
 <head>
+  <link rel="stylesheet" href="/style.css">
   <title>{% block title %} Ratings DEFAULT {% endblock %}</title>
 
 </head>
 
 <body>
+
   <!-- Show flashed messages, if any-->
   {% with messages=get_flashed_messages() %}
     {% if messages %}
@@ -18,6 +20,8 @@
       </fieldset>
     {% endif %}
   {% endwith %}
+
+  <div class="animate-me"></div>
 
   {% block content %} <!-- Block content --> {% endblock %}
 </body>

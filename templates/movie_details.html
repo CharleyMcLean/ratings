@@ -33,6 +33,7 @@
         <input type="hidden" value={{ movie.movie_id }} name="movie_id" />
         <select name='rating'>
 
+        {% if user_rating %}
           {% for i in [1,2,3,4,5] %}
             <option 
               {% if i == user_rating[0] %}
@@ -41,7 +42,14 @@
 
               value={{ i }}>{{ i }}
             </option>
-          {% endfor %}
+          {%endfor%}
+        {% else %}
+          {% for i in [1,2,3,4,5] %}
+              <option value={{ i }}>{{ i }}
+              </option>
+        {% endfor %}
+        {% endif %}
+
         </select>
         <input type="submit" value="Rate">
 
