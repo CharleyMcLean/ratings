@@ -18,26 +18,34 @@
 
   {% if session %}
       <div>Logged in as: User {{session['current_user']}}</div>
-      <form action="/?????" method="POST">
+      <form action="/rate_movie" method="POST">
+
         {% if user_rating %}
-          <div>Current rating:  {{user_rating}}</div>
+          <div>Current rating:  {{user_rating[0]}}</div>
           <div>Rerate movie?</div>
         {% else %}
           <div>Movie not yet rated by you.</div>
           <div>Rate movie?</div>
         {% endif %}
 
-        <select>
-          <option name="rating" value="1">1</option>
-          <option name="rating" value="2">2</option>
-          <option name="rating" value="3">3</option>
-          <option name="rating" value="4">4</option>
-          <option name="rating" value="5">5</option>
-        </select>
+        <!-- Dropdown box for ratings 1-5 -->
+        <input type="hidden" value={{session['current_user']}} name="user_id" />
+        <input type="hidden" value={{ movie.movie_id }} name="movie_id" />
+        <select name='rating'>
 
+          {% for i in [1,2,3,4,5] %}
+            <option 
+              {% if i == user_rating[0] %}
+                selected
+              {% endif %}
+
+              value={{ i }}>{{ i }}
+            </option>
+          {% endfor %}
+        </select>
         <input type="submit" value="Rate">
 
-    </form>
+      </form>
       
   {% endif %}
 

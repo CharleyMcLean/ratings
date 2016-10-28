@@ -40,16 +40,16 @@ def user_list():
 
 
 @app.route("/users/<user_id>")
-    # Get user OBJECT
 def user_details(user_id):
-    """User details pages"""
+    """User details, shows all movies rated by user."""
+
+    # Get user OBJECT
     user = User.query.get(user_id)
 
+    # All movies rated by user.
     movie_ratings = (db.session.query(Movie, Rating)
                                .join(Rating).filter(Rating.user_id == user_id)
                                .order_by(Movie.title).all())
-
-    # movies = user.movies
 
     return render_template("user_details.html", user=user
                                               , movie_ratings=movie_ratings
@@ -61,20 +61,25 @@ def movie_list():
     """Show list of movies."""
 
     movies = Movie.query.order_by(Movie.title).all()
+
     return render_template("movie_list.html", movies=movies)
 
 
 @app.route("/movies/<int:movie_id>")
 def movie_details(movie_id):
-    """Show movie detail page."""
+    """Show movie detail page with all ratings for that movie."""
 
     movie = Movie.query.get(movie_id)
 
     ratings = movie.ratings
 
+    # If logged in, allow to rate the movie.
     if session['current_user']:
         user_rating = (db.session.query(Rating.score)
-                     .filter(Rating.user_id == session['current_user']).first())
+                         .filter(Rating.user_id == session['current_user']
+                         , Rating.movie_id == movie_id).first())
+
+    # If user has not rated the movie, show no user rating.
     else:
         user_rating = None
 
@@ -82,8 +87,38 @@ def movie_details(movie_id):
                                                , ratings=ratings
                                                , session=session
                                                , user_rating=user_rating)
-@app.route("/rate_movie", methods=[POST])
+
+
+@app.route("/rate_movie", methods=["POST"])
 def rate_movie():
+    """Adds or updates rating in database."""
+
+    # Grab parameters from HTML form.
+    score = int(request.form.get('rating'))
+    movie_id = request.form.get('movie_id')
+    user_id = request.form.get('user_id')
+
+    # If there is a rating from that user for that movie, update to new rating.
+    if (Rating.query.filter(Rating.movie_id == movie_id
+                                  , Rating.user_id == user_id).first()):
+
+        #  Grab rating object for specific movie and user.
+        rating = (Rating.query.filter(Rating.movie_id == movie_id
+                              , Rating.user_id == user_id).one())
+
+        # Update score attribute to new score.
+        rating.score = score
+        db.session.commit()
+
+    #  If there is no rating, add rating to database.
+    else:
+        # Create a rating object. Add and commit to database.
+        rating = Rating(movie_id=movie_id, user_id=user_id, score=score)
+        db.session.add(rating)
+        db.session.commit()
+
+    redirect_path = '/movies/%s' % movie_id
+    return redirect(redirect_path)
 
 
 
@@ -107,6 +142,7 @@ def register_process():
     # Check if email already associated with a user
     if User.query.filter(User.email == email).first():
         flash("Email already in use.")
+
     # If not create user instance, add to db and commit
     else:
         user = User(email=email, password=password, age=age, zipcode=zipcode)
@@ -135,6 +171,7 @@ def login_process():
 
     # If email is in database, grab password from database
     if User.query.filter(User.email == email).first():
+
         # Grab user OBJECT
         user = User.query.filter(User.email==email).first()
 

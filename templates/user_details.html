@@ -5,16 +5,13 @@
 {% block content %}
 
   {% if session %}
-      <div>
-        Logged in as: User {{session['current_user']}}
-      </div>
+  
+      <div>Logged in as: User {{session['current_user']}}</div>
 
   {% endif %}
 
 
-  <div>
-    Age: {{ user.age }}
-  </div>  
+  <div>Age: {{ user.age }}</div>  
 
   <div>
     Zipcode: {{ user.zipcode }}
@@ -23,6 +20,7 @@
 
     <h2>Movies</h2>
     <ul>
+
       {% for movie, rating in movie_ratings %}
           <li> 
               <a href="/movies/{{ movie.movie_id }}">
